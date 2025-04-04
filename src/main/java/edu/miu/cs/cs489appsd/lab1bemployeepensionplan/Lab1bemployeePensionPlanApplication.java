@@ -62,34 +62,32 @@ public class Lab1bemployeePensionPlanApplication {
 
     private static void showUpcomingEnrollees() {
         LocalDate today = LocalDate.now();
-        LocalDate nextQuarterStart = today.plusMonths(3 - (today.getMonthValue() - 1) % 3);
+
+        int currentQuarter = (today.getMonthValue() - 1) / 3 + 1;
+        int nextQuarter = currentQuarter == 4 ? 1 : currentQuarter + 1;
+        int startMonth = (nextQuarter - 1) * 3 + 1;
+        int year = (nextQuarter == 1) ? today.getYear() + 1 : today.getYear();
+
+        LocalDate nextQuarterStart = LocalDate.of(year, startMonth, 1);
         LocalDate nextQuarterEnd = nextQuarterStart.plusMonths(3).minusDays(1);
 
-        List<Employee> upcomingEnrollees = employees.stream()
-                .filter(e -> !e.isEnrolledInPension() && e.getYearsWorked() >= 3)
+        List<Employee> upcoming = employees.stream()
+                .filter(e -> !e.isEnrolledInPension())
                 .filter(e -> {
                     LocalDate employmentDate = e.getEmploymentDate();
-                    return employmentDate.plusYears(3).isAfter(nextQuarterStart.minusDays(1)) &&
-                            employmentDate.plusYears(3).isBefore(nextQuarterEnd.plusDays(1));
+                    LocalDate threeYearMark = employmentDate.plusYears(3);
+                    return !threeYearMark.isAfter(nextQuarterEnd);
                 })
                 .sorted(Comparator.comparing(Employee::getEmploymentDate).reversed())
                 .toList();
-
-        List<Employee> upcoming = new ArrayList<>();
-        for (Employee e : employees) {
-            if (!e.isEnrolledInPension() && e.getEmploymentDate().isBefore(nextQuarterEnd)) {
-                upcoming.add(e);
-            }
-        }
-
-
-        upcoming.sort(Comparator.comparing(Employee::getEmploymentDate).reversed());
 
         System.out.println("\nQuarterly Upcoming Enrollees:");
         for (Employee e : upcoming) {
             System.out.println(e);
         }
     }
+
+
 }
 
 
