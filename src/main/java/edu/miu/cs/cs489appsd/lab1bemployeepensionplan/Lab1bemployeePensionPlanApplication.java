@@ -47,9 +47,10 @@ public class Lab1bemployeePensionPlanApplication {
         employees.add(new Employee(5, "Anna", "Wiltord", "2022-06-15", 85750.00));
         employees.add(new Employee(6, "Yosef", "Tesfalem", "2022-10-31", 100000.00));
 
-        employees.get(1).enrollToPension(new PensionPlan("EX1089", "2023-01-17", 100.00));
-        employees.get(2).enrollToPension(new PensionPlan("SM2" +
-                "307", "2019-11-04", 1555.50));
+        employees.get(0).enrollToPension(new PensionPlan("EX1089", "2024-06-01", 500.00)); // Daniel
+        employees.get(2).enrollToPension(new PensionPlan("SM2307", "2024-06-01", 800.00)); // Carly
+        employees.get(4).enrollToPension(new PensionPlan("PL1452", "2024-06-01", 450.00)); // Anna
+
     }
 
     private static void showAllEmployees() {
@@ -80,6 +81,14 @@ public class Lab1bemployeePensionPlanApplication {
                 })
                 .sorted(Comparator.comparing(Employee::getEmploymentDate).reversed())
                 .toList();
+
+//        LocalDate eligibilityCutoff = nextQuarterEnd.minusYears(3);
+//
+//        List<Employee> upcoming = employees.stream()
+//                .filter(e -> !e.isEnrolledInPension())
+//                .filter(e -> !e.getEmploymentDate().isAfter(eligibilityCutoff))
+//                .sorted(Comparator.comparing(Employee::getEmploymentDate).reversed())
+//                .toList();
 
         System.out.println("\nQuarterly Upcoming Enrollees:");
         for (Employee e : upcoming) {
